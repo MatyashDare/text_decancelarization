@@ -68,16 +68,18 @@ def encode_cls(texts, model, tokenizer, batch_size=32, verbose=False):
 
 
 def count_CP(
-        model,
-        tokenizer,
+        meaning_model,
+        meaning_tokenizer,
         original_texts,
         rewritten_texts,
         batch_size=32,
         verbose=False,
 ):
     scores = (
-            encode_cls(original_texts, model=model, tokenizer=tokenizer, batch_size=batch_size, verbose=verbose)
-            * encode_cls(rewritten_texts, model=model, tokenizer=tokenizer, batch_size=batch_size, verbose=verbose)
+            encode_cls(original_texts, model=meaning_model, tokenizer=meaning_tokenizer, batch_size=batch_size,
+                       verbose=verbose)
+            * encode_cls(rewritten_texts, model=meaning_model, tokenizer=meaning_tokenizer, batch_size=batch_size,
+                         verbose=verbose)
     ).sum(1)
     return scores
 
@@ -152,24 +154,45 @@ meaning_model, meaning_tokenizer = load_model('cointegrated/LaBSE-en-ru', use_cu
                                               model_class=AutoModel)
 
 
-def count_metrics(original_texts, rewritten_texts):
-    STA = count_STA(rewritten_texts,
-                    sta_model)
-
-    CP = count_CP(model=meaning_model,
-                  tokenizer=meaning_tokenizer,
-                  original_texts=original_texts,
-                  rewritten_texts=rewritten_texts,
-                  batch_size=1,
-                  verbose=False)
-
-    FL, perp_mean = count_FL(original_texts,
-                             rewritten_texts)
-
-    BLEU = count_BLEU(original_texts,
-                      rewritten_texts)
-    METEOR = count_METEOR(original_texts,
+def count_metrics(original_texts, rewritten_texts, ALL=False):
+    if ALL:
+        STA, _ = count_STA(rewritten_texts,
+                           sta_model)
+        CP = count_CP(model=meaning_model,
+                      tokenizer=meaning_tokenizer,
+                      original_texts=original_texts,
+                      rewritten_texts=rewritten_texts,
+                      batch_size=1,
+                      verbose=False)
+        FL, perp_mean = count_FL(original_texts,
+                                 rewritten_texts)
+        BLEU = count_BLEU(original_texts,
                           rewritten_texts)
+        METEOR = count_METEOR(original_texts,
+                              rewritten_texts)
+        GM = count_GM(STA, CP, FL)
+        return STA, CP, FL, perp_mean, BLEU, METEOR, GM
 
-    GM = count_GM(STA, CP, FL)
-    return STA, CP, FL, perp_mean, BLEU, METEOR, GM
+    else:
+        probs, classes = count_STA(rewritten_texts,
+                                   sta_model)
+        STA = classes.mean()
+        print('STA', STA)
+        CP = count_CP(meaning_model=meaning_model,
+                      meaning_tokenizer=meaning_tokenizer,
+                      original_texts=original_texts,
+                      rewritten_texts=rewritten_texts,
+                      batch_size=1,
+                      verbose=False).mean()
+        print('CP', CP)
+        diffs, FL = count_FL(original_texts,
+                             rewritten_texts)
+        print('FL', FL)
+        BLEU = count_BLEU(original_texts,
+                          rewritten_texts).mean()
+        print('BLEU', BLEU)
+        METEOR = count_METEOR(original_texts,
+                              rewritten_texts).mean()
+        print('METEOR', METEOR)
+        GM = count_GM(STA, CP, FL)
+        return STA, CP, FL, BLEU, METEOR, GM
