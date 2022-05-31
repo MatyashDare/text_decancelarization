@@ -1,6 +1,6 @@
 # Text Decancelarization
 ## Abstract
-Despite the abundance of studies in style transfer, to our knowledge, there is no existing research connected with “translation” of official documents into neurally styled texts. In many previous works style transfer models were able to change the style of a text, but they tended to distort the original meaning, or, vise versa, the meaning of the source texts’, while the style remained unchanged. Reading official papers such as legal texts can be challenging for a person without special education due to their syntactic and morphological complexity. Therefore, there is a distinct need for a tool which would be able to convert a legal text into sentences which have the same meaning but are more accessible and comprehensible for an average reader. This paper formulates a new style transfer task and suggests several possible solutions. The paper gives a detailed overview of supervised approach to text decan- celization. A new parallel corpus of sentences originally written in formal language and one or more variants of it written in neutral style was collected. We fine-tuned different style transfer models on our dataset. We developed a style transfer model which is able to translate legal texts into utterances in neutral style, while preserving the meaning of the transformed words.
+Despite the abundance of studies in style transfer, to our knowledge, there is no existing research connected with “translation” of official documents into neurally styled texts. In many previous works style transfer models were able to change the style of a text, but they tended to distort the original meaning, or, vise versa, the meaning of the source texts’, while the style remained unchanged. Reading official papers such as legal texts can be challenging for a person without special education due to their syntactic and morphological complexity. Therefore, there is a distinct need for a tool which would be able to convert a legal text into sentences which have the same meaning but are more accessible and comprehensible for an average reader. This paper formulates a new style transfer task and suggests several possible solutions. The paper gives a detailed overview of supervised approach to text decancelization. A new parallel corpus of sentences originally written in formal language and one or more variants of it written in neutral style was collected. We fine-tuned different style transfer models on our dataset. We developed a style transfer model which is able to translate legal texts into utterances in neutral style, while preserving the meaning of the transformed words.
 # Task
 The [thesis paper](https://github.com/MatyashDare/text_decancelarization/blob/master/materials/thesis.pdf) proposes a new text style transfer task - text decancelarization. 
 ## Data
@@ -36,7 +36,7 @@ during the optimization, we adopted the `Focal loss` [(Lin et al., 2017)](https:
    
    -  [ruT5-large](https://huggingface.co/sberbank-ai/ruT5-large)
    
-   - [ruT5-large](https://huggingface.co/sberbank-ai/ruT5-large) + Focal loss
+   - [ruT5-large](https://huggingface.co/sberbank-ai/ruT5-large) +  `Focal loss`
    
 **ruGPT3**
 
