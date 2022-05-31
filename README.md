@@ -91,7 +91,7 @@ Secondly, we calculate cosine similarity (CS) between sentence-level embeddings 
 source and transformed texts. We used [LaBSE](https://huggingface.co/cointegrated/LaBSE-en-ru) model pre-trained on Russian texts.
 
 3. **Fluency (FL)**
-We utilized the [ruGPT2-Large](https://github.com/vlarine/ruGPT2) language model for computing Perplexity (PPL) of the generated and original texts.
+We utilized the [ruGPT2-large](https://github.com/vlarine/ruGPT2) language model for computing Perplexity (PPL) of the generated and original texts.
 The higher 1/PPL, the more natural a sentence is generated.
 
 4. **Aggregated metric (GM)**
